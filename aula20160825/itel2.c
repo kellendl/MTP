@@ -1,16 +1,16 @@
 #include<stdio.h>
 int main()
 {
-    int i,B,P,resultado;
+    int i,B,P,resultado=1;
     printf("Escreva a base:");
-    scanf("%d\n",&B);
+    scanf("%d",&B);
     printf("Escreva a potencia:");
-    scanf("%d\n",&P);
+    scanf("%d",&P);
 
 
     for(i=0;i<P;i++)
     {
-        resultado=(resultado*P);
+        resultado=(resultado*B);
     }
     printf("O resultado e: %d\n", resultado);
 
