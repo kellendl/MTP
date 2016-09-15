@@ -16,7 +16,7 @@ char opcao;
 
 do{
 
-printf("Voce quer entrar com (i)nt ou (f)loat?");
+printf("Voce quer entrar com int ou float?");
 
 scanf("%c", &opcao);
 
