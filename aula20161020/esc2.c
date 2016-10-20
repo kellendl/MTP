@@ -7,28 +7,29 @@ void gravarDados();
 
 
 int main () {
-    int numeros, i, aleatorio;
+    int numeros, i=0;
+    int *aleatorio;
     printf(" Digite a quantidade de numeros:");
     fscanf(stdin,"%d", &numeros);
 
-    aleatorio = (int*)(sizeof (numeros));
+    aleatorio = (int*)malloc(numeros*sizeof (int));
 
     for(i=0; i<numeros; i++){
-    aleatorio = rand();
-    gravarDados(numeros);
+        aleatorio[i] = rand();
+       gravarDados(aleatorio[i]);
     }
     free(aleatorio);
 
     return 0;
 }
-void gravarDados(int *numeros){
+void gravarDados(int numeros){
     FILE * arquivo;
     int aletorio;
-    arquivo = fopen("info. txt", "w");
+    arquivo = fopen("info.txt", "a");
     if (arquivo ==NULL)
         fprintf(stderr,"Erro na gravacao do arquivo!\n");
     else {
-    fprintf(arquivo, "%d\n%d\n", &numeros);
-    fclose(arquivo);
+        fprintf(arquivo, "%d\n", numeros);
+        fclose(arquivo);
     }
 }
