@@ -1,77 +1,85 @@
 #include<stdio.h>
-#define MAXPILHA 10 // tamanho maximo da pilha
-typedef char Dado; // muda o tipo da pilha aqui
-typedef struct Pilha_
-{
-    int idtopo;
-    Dado dados[MAXPILHA];
+#include<stdlib.h>
+#include<string.h>
 
+typedef int Dado;//tipo da pilha int
+typedef struct Pilha_{
+   Dado topo;
+   struct Pilha_ * proximo;
 }Pilha;
+// funcao mudara o dado-> passagem por referencia
 
-void push(Pilha * ppilha, Dado elemento);
-void pop(Pilha * ppilha);
-Dado top(Pilha pilha);
-int empty(Pilha pilha);
+void push (Pilha ** ppilha, Dado elemento);
+void pop (Pilha ** ppilha);
+Dado top (Pilha * ppilha);
+int empty(Pilha * pilha);
 
 int main()
 {
-    int numero, i;
-    Pilha pilha;
-    pilha.idtopo = -1;// Pilha vazia
-    // PROGRAMA
-
-    do
+    int numero,escolha;
+    char * texto;
+    Pilha * pilha = NULL;
+    do {
+        printf("Digite os numero inteiros positivos:");
+        scanf("%d",&numero);
+        if (numero>=0)
+        {
+             push(&pilha,numero);
+        }
+    }while(numero>=0);
+    printf("\n\n");
+    printf("(1) Salvar em arquivo.\n(2)Visualizar na tela.\n");
+    scanf("%d",&escolha);
+    if (escolha == 1)
     {
-        printf("\nEscreva a sequencia de numeros positivos: ");
-        scanf("%d", &numero);
-
-        if(numero>=0)
-
-        push(&pilha, numero); //testa PUSH
-        //printf("%d", top(pilha)); // testa TOP
-    }while(!numero <= 0);
-
-    printf("\nPop: ");
-    while(!empty(pilha)){ //testa EMPTY
-        printf("%d ", top(pilha)); // testa TOP
-        pop(&pilha);
+        FILE *arquivo;
+        arquivo = fopen("sequencia.txt","w");
+        if(arquivo == NULL)
+            fprintf(stderr, "Erro na criacao do arquivo!\n");
+        else {
+                while(!empty(pilha))
+                {
+                    fprintf(arquivo," %d ",top(pilha));
+                    pop(&pilha);
+                }
+            fclose(arquivo);
+        }
     }
-
-
-
+    else
+    {
+        printf("Numeros invertidos ");
+        while (!empty(pilha))
+            {
+                printf("%d ",top(pilha));
+                pop(&pilha);
+                }
+        printf("\n\n");
+    }
 
     return 0;
 }
-
-void push(Pilha * ppilha, Dado elemento)
-{
-    if(ppilha->idtopo + 1 < MAXPILHA)
+void push (Pilha ** ppilha, Dado elemento){
+    Pilha * novo = (Pilha*) malloc(sizeof(Pilha));
+    novo->topo = elemento;
+    novo->proximo = *ppilha;
+    *ppilha = novo;
+}
+void pop (Pilha ** ppilha){
+    Pilha * aux = NULL;
+    if(!empty(*ppilha))
     {
-        ppilha-> idtopo++;
-        ppilha->dados[ppilha->idtopo] = elemento;
-
+        aux = (*ppilha)->proximo;
+        free(*ppilha);
+        *ppilha = aux;
     }
-    else
-        fprintf(stderr,"\nERRO :: ESTOURO DE PILHA!\n");
-}
-
-
-void pop(Pilha * ppilha)
-{
-    if(ppilha->idtopo >= 0)
-    {
-        ppilha-> dados[ppilha->idtopo] = 0x0; // opcional,  "limpa" elemento
-        ppilha-> idtopo--;
+    else {
+        fprintf(stdout,"\n ATENCAO!!!Pilha vazia\n");
     }
-        else
-        fprintf(stdout,"\nWARNING :: PILHA vazia!\n");
-
 }
-Dado top(Pilha pilha)
+Dado top (Pilha * pilha)
 {
-    return pilha.dados[pilha.idtopo];
+     return pilha -> topo;
 }
-int empty(Pilha pilha)
-{
-    return (pilha.idtopo == -1);
-}
+int empty(Pilha * pilha){
+    return (pilha == NULL);
+    }

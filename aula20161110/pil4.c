@@ -1,80 +1,64 @@
-#include<stdio.h>
-#define MAXPILHA 1024 // tamanho maximo da pilha
-typedef char Dado; // muda o tipo da pilha aqui
-typedef struct Pilha_
-{
-    int idtopo;
-    Dado dados[MAXPILHA];
+#include <stdio.h>
+#include <stdlib.h>
 
+typedef int Dado;
+
+typedef struct Pilha_{
+Dado topo;
+struct Pilha_ * prox;
 }Pilha;
 
-void push(Pilha * ppilha, Dado elemento);
-void pop(Pilha * ppilha);
-Dado top(Pilha pilha);
-int empty(Pilha pilha);
+void push(Pilha ** ppilha, Dado elemento);
+void pop(Pilha ** ppilha);
+Dado top(Pilha * pilha);
+int empty (Pilha * pilha);
+int main (){
+    int i;
+    int aux;
+    int bit;
+    int num;
+    Pilha * pilha = NULL;
+    //programa
 
-int main()
-{
+    printf("insira um numero:\n ");
+    scanf("%d", &num);
 
-    unsigned int  numero, AUX, BIT;
-    Pilha pilha;
-    pilha.idtopo = -1;// Pilha vazia
-    // PROGRAMA
-    printf("Escreva um numero inteiro:");
-    scanf("%d", numero);
-
-    printf("\nPush: ");
-
+    aux=num;
+    while(aux>0)
     {
-        AUX = numero;
-    if(AUX > 0)
-    BIT = AUX % 2;
-    //armazena o BIT (o laço vai do *menos* para o *mais* significativo)
-    AUX = AUX/2;
-
-
-        push(&pilha, AUX ); //testa PUSH
-        printf("%f", top(pilha)); // testa TOP
+    bit=aux%2;
+    push(&pilha, bit);
+    aux=aux/2;
     }
-    printf("\nPop: ");
-    while(!empty(pilha)){ //testa EMPTY
-        printf("%f", top(pilha)); // testa TOP
+
+     printf("Numeros:");
+     while(!empty(pilha)) {
+        printf("%d", top(pilha));
         pop(&pilha);
-    }
+        }
+return 0;
+}
+void push(Pilha ** ppilha, Dado elemento){
+    Pilha * novo = (Pilha*) malloc(sizeof(Pilha));
+    novo->topo = elemento;
+    novo->prox = *ppilha;
+    *ppilha = novo;
+}
+void pop(Pilha ** ppilha){
+    Pilha * aux = NULL;
+if(!empty(*ppilha)){
+        aux = (*ppilha)->prox;
+         free(*ppilha);
+         *ppilha = aux;
 
-
-    return 0;
+        }
+     else
+        fprintf(stdout, "\nWARNING :: pilha vazia");
 }
 
-void push(Pilha * ppilha, Dado elemento)
-{
-    if(ppilha->idtopo + 1 < MAXPILHA)
-    {
-        ppilha-> idtopo++;
-        ppilha->dados[ppilha->idtopo] = elemento;
-
-    }
-    else
-        fprintf(stderr,"\nERRO :: ESTOURO DE PILHA!\n");
+Dado top(Pilha * pilha){
+    return pilha->topo;
 }
-
-
-void pop(Pilha * ppilha)
-{
-    if(ppilha->idtopo >= 0)
-    {
-        ppilha-> dados[ppilha->idtopo] = 0x0; // opcional,  "limpa" elemento
-        ppilha-> idtopo--;
-    }
-        else
-        fprintf(stdout,"\nWARNING :: PILHA vazia!\n");
-
-}
-Dado top(Pilha pilha)
-{
-    return pilha.dados[pilha.idtopo];
-}
-int empty(Pilha pilha)
-{
-    return (pilha.idtopo == -1);
+int empty (Pilha * pilha) {
+   return (pilha == NULL);
 }
